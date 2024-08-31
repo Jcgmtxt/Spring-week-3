@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class StudentServices implements IStudentService {
+public class    StudentServices implements IStudentService {
 
 
     @Autowired
@@ -31,6 +32,29 @@ public class StudentServices implements IStudentService {
         });
 
         return listOfStudent;
+    }
+
+    @Override
+    public StudentDtoResponse readById(Long id) {
+
+        Optional<StudentEntity> studentEntityOptional = studentRepository.findById(id);
+
+        if (studentEntityOptional.isPresent()){
+
+            StudentEntity studentEntity = studentEntityOptional.get();
+
+            StudentDtoResponse student = StudentDtoResponse.builder()
+                    .idStudent(studentEntity.getIdStudent())
+                    .name(studentEntity.getName())
+                    .email(studentEntity.getEmail())
+                    .build();
+
+            return student;
+
+        }
+
+        return null;
+
     }
 
 }

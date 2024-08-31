@@ -6,6 +6,7 @@ import java.util.List;
 public interface IStudentService {
 
     public List<StudentDtoResponse> readAll();
+    public StudentDtoResponse readById(Long id);
 
 
 }
