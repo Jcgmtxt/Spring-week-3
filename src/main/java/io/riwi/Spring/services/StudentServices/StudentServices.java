@@ -62,7 +62,7 @@ public class StudentServices implements IStudentService {
     }
 
     @Override
-    public StudentEntity create(StudentDtoRequest studentDtoRequest) {
+    public StudentEntity save(StudentDtoRequest studentDtoRequest) {
 
         StudentEntity studentEntity = StudentEntity.builder()
                 .name(studentDtoRequest.getName())

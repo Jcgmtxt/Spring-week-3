@@ -33,12 +33,18 @@ public class studentController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Establece el código de estado HTTP 201 (Created)
     public void createStudent(@RequestBody @Valid StudentDtoRequest studentDtoRequest) {
-        studentServices.create(studentDtoRequest);
+        studentServices.save(studentDtoRequest);
     }
 
     @PatchMapping("/{id}/disable")
     public StudentDtoResponse disableStudent(@PathVariable Long id){
        return studentServices.disable(id);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateStudent(@RequestBody @Valid StudentDtoRequest studentDtoRequest) {
+        studentServices.save(studentDtoRequest);
     }
 
 }
