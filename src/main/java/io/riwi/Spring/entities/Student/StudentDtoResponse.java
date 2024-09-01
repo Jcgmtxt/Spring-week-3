@@ -16,4 +16,6 @@ public class StudentDtoResponse {
 
     private String email;
 
+    private Boolean active;
+
 }
