@@ -1,5 +1,6 @@
 package io.riwi.Spring.services.StudentServices;
 
+import io.riwi.Spring.entities.Student.StudentDtoRequest;
 import io.riwi.Spring.entities.Student.StudentDtoResponse;
 import io.riwi.Spring.entities.Student.StudentEntity;
 import io.riwi.Spring.repository.StudentRepository.IStudentRepository;
@@ -54,6 +55,23 @@ public class    StudentServices implements IStudentService {
         }
 
         return null;
+
+    }
+
+    @Override
+    public StudentEntity create(StudentDtoRequest studentDtoRequest) {
+
+
+
+        StudentEntity studentEntity = StudentEntity.builder()
+                .name(studentDtoRequest.getName())
+                .email(studentDtoRequest.getEmail())
+                .active(studentDtoRequest.isActive())
+                .build();
+
+        studentRepository.save(studentEntity);
+
+        return studentEntity;
 
     }
 
