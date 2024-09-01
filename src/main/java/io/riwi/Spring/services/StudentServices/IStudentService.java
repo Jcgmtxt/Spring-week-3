@@ -9,6 +9,6 @@ public interface IStudentService {
 
     public List<StudentDtoResponse> readAll();
     public StudentDtoResponse readById(Long id);
-    public StudentEntity create (StudentDtoRequest studentDtoRequest);
+    public StudentEntity save (StudentDtoRequest studentDtoRequest);
     public StudentDtoResponse disable (Long id);
 }
