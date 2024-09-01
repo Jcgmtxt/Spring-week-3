@@ -6,7 +6,11 @@ import io.riwi.Spring.entities.Student.StudentDtoResponse;
 
 import io.riwi.Spring.services.StudentServices.StudentServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -23,6 +27,25 @@ public class studentController {
     @GetMapping
     public List<StudentDtoResponse> getAllStudent(){
         return studentServices.readAll();
+    }
+
+    @GetMapping("/by")
+    public Page<StudentDtoResponse> getStudents(
+
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        // Crear un objeto Pageable para la paginación
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Llamar al servicio para obtener la lista de estudiantes filtrada y paginada
+        Page<StudentDtoResponse> students = studentServices.readBy(name, email, pageable);
+
+        // Retornar los resultados directamente
+        return students;
+
     }
 
     @GetMapping("/{id}")
