@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/students")
@@ -35,5 +36,9 @@ public class studentController {
         studentServices.create(studentDtoRequest);
     }
 
+    @PatchMapping("/{id}/disable")
+    public StudentDtoResponse disableStudent(@PathVariable Long id){
+       return studentServices.disable(id);
+    }
 
 }

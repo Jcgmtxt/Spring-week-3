@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class    StudentServices implements IStudentService {
+public class StudentServices implements IStudentService {
 
 
     @Autowired
@@ -23,11 +23,13 @@ public class    StudentServices implements IStudentService {
         List<StudentDtoResponse> listOfStudent = new ArrayList<>();
         List<StudentEntity> listWithoutDto = studentRepository.findAll();
 
-        listWithoutDto.forEach(student -> {
+        listWithoutDto.forEach(studentEntity -> {
             StudentDtoResponse dto = StudentDtoResponse.builder()
-                    .idStudent(student.getIdStudent())
-                    .name(student.getName())
-                    .email(student.getEmail()).build();
+                    .idStudent(studentEntity.getIdStudent())
+                    .name(studentEntity.getName())
+                    .email(studentEntity.getEmail())
+                    .active(studentEntity.isActive())
+                    .build();
 
             listOfStudent.add(dto);
         });
@@ -48,6 +50,7 @@ public class    StudentServices implements IStudentService {
                     .idStudent(studentEntity.getIdStudent())
                     .name(studentEntity.getName())
                     .email(studentEntity.getEmail())
+                    .active(studentEntity.isActive())
                     .build();
 
             return student;
@@ -61,8 +64,6 @@ public class    StudentServices implements IStudentService {
     @Override
     public StudentEntity create(StudentDtoRequest studentDtoRequest) {
 
-
-
         StudentEntity studentEntity = StudentEntity.builder()
                 .name(studentDtoRequest.getName())
                 .email(studentDtoRequest.getEmail())
@@ -73,6 +74,30 @@ public class    StudentServices implements IStudentService {
 
         return studentEntity;
 
+    }
+
+    @Override
+    public StudentDtoResponse disable(Long id) {
+
+        Optional<StudentEntity> studentEntityOptional = studentRepository.findById(id);
+
+        if (studentEntityOptional.isPresent()) {
+
+            StudentEntity studentEntity = studentEntityOptional.get();
+            studentEntity.setActive(false);
+            studentRepository.save(studentEntity);
+
+            StudentDtoResponse student = StudentDtoResponse.builder()
+                    .idStudent(studentEntity.getIdStudent())
+                    .name(studentEntity.getName())
+                    .email(studentEntity.getEmail())
+                    .active(studentEntity.isActive())
+                    .build();
+
+            return student;
+        }
+
+        return null;
     }
 
 }
