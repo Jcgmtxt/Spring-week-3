@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -31,5 +32,9 @@ public class StudentEntity {
     @Column(name = "active")
     private boolean active;
 
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = Date.valueOf(LocalDate.now());
+    }
 
 }

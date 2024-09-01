@@ -1,10 +1,14 @@
 package io.riwi.Spring.contollers.StudentController;
 
+import io.riwi.Spring.entities.Student.StudentDtoRequest;
 import io.riwi.Spring.entities.Student.StudentDtoResponse;
+
 
 import io.riwi.Spring.services.StudentServices.StudentServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -23,6 +27,12 @@ public class studentController {
     @GetMapping("/{id}")
     public StudentDtoResponse getStudentById(@PathVariable Long id){
         return studentServices.readById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED) // Establece el código de estado HTTP 201 (Created)
+    public void createStudent(@RequestBody @Valid StudentDtoRequest studentDtoRequest) {
+        studentServices.create(studentDtoRequest);
     }
 
 
