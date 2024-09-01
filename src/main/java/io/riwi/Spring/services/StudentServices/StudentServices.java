@@ -5,6 +5,8 @@ import io.riwi.Spring.entities.Student.StudentDtoResponse;
 import io.riwi.Spring.entities.Student.StudentEntity;
 import io.riwi.Spring.repository.StudentRepository.IStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,6 +40,29 @@ public class StudentServices implements IStudentService {
     }
 
     @Override
+    public Page<StudentDtoResponse> readBy(String name, String email, Pageable pageable) {
+
+        Page<StudentEntity> studentPage;
+
+        if (name != null && email != null) {
+            studentPage = studentRepository.findByNameAndEmailContainingAndActiveTrue(name, email, pageable);
+        } else if (name != null) {
+            studentPage = studentRepository.findByNameAndActiveTrue(name, pageable);
+        } else if (email != null) {
+            studentPage = studentRepository.findByEmailContainingAndActiveTrue(email, pageable);
+        } else {
+            studentPage = studentRepository.findAllByActiveTrue(pageable);
+        }
+
+        return studentPage.map(student -> StudentDtoResponse.builder()
+                .idStudent(student.getIdStudent())
+                .name(student.getName())
+                .email(student.getEmail())
+                .active(student.isActive())
+                .build());
+    }
+
+    @Override
     public StudentDtoResponse readById(Long id) {
 
         Optional<StudentEntity> studentEntityOptional = studentRepository.findById(id);
@@ -62,7 +87,7 @@ public class StudentServices implements IStudentService {
     }
 
     @Override
-    public StudentEntity save(StudentDtoRequest studentDtoRequest) {
+    public void save(StudentDtoRequest studentDtoRequest) {
 
         StudentEntity studentEntity = StudentEntity.builder()
                 .name(studentDtoRequest.getName())
@@ -71,8 +96,6 @@ public class StudentServices implements IStudentService {
                 .build();
 
         studentRepository.save(studentEntity);
-
-        return studentEntity;
 
     }
 
